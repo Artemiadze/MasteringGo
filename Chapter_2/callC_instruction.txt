@@ -1,0 +1,36 @@
+Единственное — нужно ском-
+пилировать C-код, чтобы создать библиотеку, для чего следует выполнить такие
+команды:
+$ ls -l callClib/
+total 16
+-rw-r--r--@ 1 mtsouk staff 162 Jan 10 09:17 callC.c
+-rw-r--r--@ 1 mtsouk staff 89 Jan 10 09:17 callC.h
+$ gcc -c callClib/*.c
+$ ls -l callC.o
+-rw-r--r-- 1 mtsouk staff 952 Jan 22 22:03 callC.o
+$ file callC.o
+callC.o: Mach-O 64-bit object x86_64
+$ /usr/bin/ar rs callC.a *.o
+ar: creating archive callC.a
+$ ls -l callC.a
+-rw-r--r-- 1 mtsouk staff 4024 Jan 22 22:03 callC.a
+$ file callC.a
+callC.a: current ar archive
+$ rm callC.o
+У нас появится файл с именем callC.a, расположенный в том же каталоге, что
+и callC.go. Исполняемый файл gcc — это имя С-компилятора.
+Теперь мы готовы скомпилировать файл с Go-кодом и создать новый испол-
+няемый файл:
+$ go build callC.go
+$ ls -l callC
+-rwxr-xr-x 1 mtsouk staff 2403184 Jan 22 22:10 callC
+$ file callC
+callC: Mach-O 64-bit executable x86_64
+
+Запустив исполняемый файл callC, получим следующий результат:
+$ ./callC
+Going to call a C function!
+Hello from C!
+Going to call another C function!
+Go send me This is Mihalis!
+All perfectly done!
